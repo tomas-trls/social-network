@@ -30,7 +30,9 @@ jobs:
         with:
           ruby-version: '3.1'
       - name: Install dependencies
-        run: bundle install
+        run: |
+          bundle install --jobs 4 --retry 3
+          yarn
       - name: Set up database
         run: bundle exec rails db:prepare
         env:
