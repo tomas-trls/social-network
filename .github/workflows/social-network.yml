@@ -1,7 +1,14 @@
 name: Social Network
-on: [push]
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   test:
+
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -17,20 +24,13 @@ jobs:
           --health-retries 5
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
+      - uses: actions/checkout@v3
       - name: Set up Ruby
         uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
         with:
           ruby-version: '3.1'
-          bundler-cache: true
       - name: Install dependencies
-        run: |
-          bundle install --jobs 4 --retry 3
-          yarn
+        run: bundle install
       - name: Set up database
         run: bundle exec rails db:prepare
         env:
